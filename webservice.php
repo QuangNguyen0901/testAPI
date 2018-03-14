@@ -24,8 +24,14 @@ $query = mysqli_query($conn, 'SELECT * FROM member');
 //Tạo bảng lưu thông tin
 $members = array();
 while ($rs = mysqli_fetch_assoc($query)) {
+    print_r($rs);
     $members[] = $rs;
 }
+
+print_r($members);
+
+echo $members[1]['user_name'];
+
 
 //Trả về kiểu json
 if ($format == 'json') {
