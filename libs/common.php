@@ -1,20 +1,12 @@
 <?php
-
-$db_user = 'root'; //User đăng nhập MYSQL
-$db_pass = ''; // Pass đăng nhập MySQL
-$db_host = 'localhost'; //IP, Domain kết nối
-$db_name = 'qblog'; //Tên CSDL
-//Tạo biến kết nối với CSDL
-$conn = mysqli_connect($db_host, $db_user, $db_pass, $db_name) or die('Kết nối thất bại');
-
 //Truy vấn
-$query = mysqli_query($conn, 'SELECT * FROM member');
+$query = $query_content;
 
 //Tạo bảng lưu thông tin
-$members = array();
+$query_results = array();
 while ($rs = mysqli_fetch_assoc($query)) {
 //    print_r($rs);
-    $members[] = $rs;
+    $query_results[] = $rs;
 }
 
 //print_r($members);
@@ -35,21 +27,21 @@ if (!in_array($format, $formatList)) {
 //Trả về kiểu json
 if ($format == 'json') {
     header('Content-type: application/json; charset=utf-8');
-    echo json_encode($members);
+    echo json_encode($query_results);
 }
 if ($format == 'xml') {
     header('Content-type: text/xml; charset=utf-8');
-    echo '<users>';
-    foreach ($members as $member) {
-        echo '<user>';
-        if (is_array($member)) {
-            foreach ($member as $key => $value) {
+    echo '<'.$xml_tag.'s>';
+    foreach ($query_results as $query_result) {
+        echo '<'.$xml_tag.'>';
+        if (is_array($query_result)) {
+            foreach ($query_result as $key => $value) {
                 echo '<', $key, '>', $value, '</', $key, '>';
             }
         }
-        echo '</user>';
+        echo '</'.$xml_tag.'>';
     }
-    echo '</users>';
+    echo '</'.$xml_tag.'s>';
 }
 
 mysqli_close($conn);
