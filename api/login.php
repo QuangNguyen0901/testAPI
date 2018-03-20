@@ -1,7 +1,9 @@
 <?php
 include('../libs/config.php');
-include($root . '/libs/connection.php');  //=>$conn
-$query_content = mysqli_query($conn, 'SELECT * FROM member');
+include ($root.'/libs/MysqliDb.php');
+include ($root.'/libs/hash.php');
+$hash = new Hash();
+
 
 if (!empty($_GET)) {
     $user_name = '';
@@ -19,43 +21,40 @@ if (!empty($_GET)) {
         $flash['msg'] .= 'Please input password';
         $success = false;
     } else $pass = $_GET['pass'];
-//echo $user_name;
 
     if ($success) {
-        $db = new Database();
+        $db = new MysqliDb();
         $flash = NULL;
-        $sql = "SELECT salt FROM member WHERE user_name = '$user_name'";
-        echo $sql;
-        $db->query($sql);
-//        $db->bind([
-//            ':user_name'=>$user_name
-//        ]);
-        $salt = $db->findOne()['salt'];
+
+        //Convert input pass to salt(chuoi ma hoa)
+        $db->where("user_name", $user_name);
+        $cols = Array('salt');
+        $salt = $db->getOne('member', null, $cols)['salt'];
         $pass = $hash->create($pass, $salt);
 
-        $sql = "SELECT * FROM member WHERE user_name = '$user_name' AND password = '$pass'";
-        echo $sql;
-        $db->query($sql);
-//        $db->bind([
-//            ':user_name'=>$user_name,
-//            ':pass'=>$pass
-//        ]);
-        $user = $db->findOne();
+        //Select user voi ten user va pass ma hoa da nhap
+        $db->where("user_name", $user_name);
+        $db->where("password", $pass);
+        $user = $db->getOne('member');
 
-        if ($db->rowCount() == 1) {
+        if ($db->count == 1) {
             $_SESSION['user'] = $user;
-            header("Location:http://qblog.com/admin/");
+            $result = $user;
+//            print_r($result);
+            $xml_tag= 'user';
+            include ($root.'/libs/convert_format.php');
+//            echo 'login thanh cong';
             exit;
         } else {
             $_SESSION['flash'] = $flash;
-            header("Location:http://qblog.com/admin/?m=user&a=login");
+            echo 'login that bai';
             exit;
         }
     } else {
         $_SESSION['flash'] = $flash;
-        header("Location: http://qblog.com/admin/?m=user&a=login");
+        echo 'login that bai';
         exit;
     }
 } else {
-    include($url_common . '/app/backend/views/user/login.php');
+    echo 'khong login duoc';
 }

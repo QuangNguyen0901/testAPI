@@ -1,20 +1,7 @@
 <?php
-//Truy vấn
-$query = $query_content;
+ $query_results= $result;
 
-//Tạo bảng lưu thông tin
-$query_results = array();
-while ($rs = mysqli_fetch_assoc($query)) {
-//    print_r($rs);
-    $query_results[] = $rs;
-}
 
-//echo '<br>';
-//echo '<br>';
-//echo '<br>';
-//print_r($query_results);
-//echo '<br>';
-//echo '<br>';
 //print_r($members);
 //
 //echo $members[1]['user_name'];
@@ -38,17 +25,17 @@ if ($format == 'json') {
 if ($format == 'xml') {
     header('Content-type: text/xml; charset=utf-8');
     echo '<'.$xml_tag.'s>';
-    foreach ($query_results as $query_result) {
-        echo '<'.$xml_tag.'>';
+    foreach ($query_results as $k=>$query_result) {
         if (is_array($query_result)) {
+            echo '<'.$xml_tag.'>';
             foreach ($query_result as $key => $value) {
                 echo '<', $key, '>', $value, '</', $key, '>';
             }
+            echo '</'.$xml_tag.'>';
+        } else{
+            echo '<', $k, '>', $query_result, '</', $k, '>';
         }
-        echo '</'.$xml_tag.'>';
     }
     echo '</'.$xml_tag.'s>';
 }
-
-mysqli_close($conn);
 ?>
