@@ -38,8 +38,11 @@ if (!empty($_GET)) {
         $user = $db->getOne('member');
 
         if ($db->count == 1) {
-            $_SESSION['user'] = $user;
             $result = $user;
+            $token = $hash->random();
+
+            $data = array("token" => $token);
+//            insert token vaof DB
 //            print_r($result);
             $xml_tag= 'user';
             include ($root.'/libs/convert_format.php');
