@@ -26,6 +26,7 @@ if ($format == 'json') {
 }
 
 if ($format == 'xml') {
+    if (!isset($xml_root_tag)){ $xml_root_tag='<root></root>';}
     header('Content-type: text/xml; charset=utf-8');
     $xml_info = new SimpleXMLElement("<?xml version=\"1.0\"?>".$xml_root_tag);
     array_to_xml($query_results,$xml_info);

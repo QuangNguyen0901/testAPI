@@ -40,36 +40,33 @@ if (!empty($_GET)) {
         if ($db->count == 1) {
             $token = $hash->random();
             $date = date('Y/m/d H:i:s');
-            echo $token;
+//            echo $token;
 
             $data = array(
                 "token" => $token,
                 "token_started_at" => $date
                 );
-            print_r($data);
-            //            insert token vaof DB
 
+//          insert token vaof DB
             $db->where('id', $user['id']);
             $db->update('member', $data);
-
+//          Lay lai user da cap nhan token
             $db->where("user_name", $user_name);
             $db->where("password", $pass);
             $user = $db->getOne('member');
-//            print_r($result);
+
             $xml_root_tag = '<user></user>';
             $result = $user;
             include($root . '/libs/convert_format.php');
-//            echo 'login thanh cong';
             exit;
         } else {
-            echo 'login that bai';
+            echo 'Khong co user tuong ung hoac co nhieu hon 1 user co thong tin dang nhap da nhap';
             exit;
         }
     } else {
-        $_SESSION['flash'] = $flash;
         echo 'login that bai';
         exit;
     }
 } else {
-    echo 'khong login duoc';
+    echo 'Khong co thong tin GET';
 }
