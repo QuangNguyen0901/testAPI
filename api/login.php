@@ -1,7 +1,7 @@
 <?php
 include('../libs/config.php');
-include ($root.'/libs/MysqliDb.php');
-include ($root.'/libs/hash.php');
+include($root . '/libs/MysqliDb.php');
+include($root . '/libs/hash.php');
 $hash = new Hash();
 
 
@@ -38,18 +38,30 @@ if (!empty($_GET)) {
         $user = $db->getOne('member');
 
         if ($db->count == 1) {
-            $result = $user;
             $token = $hash->random();
+            $date = date('Y/m/d H:i:s');
+            echo $token;
 
-            $data = array("token" => $token);
-//            insert token vaof DB
+            $data = array(
+                "token" => $token,
+                "token_started_at" => $date
+                );
+            print_r($data);
+            //            insert token vaof DB
+
+            $db->where('id', $user['id']);
+            $db->update('member', $data);
+
+            $db->where("user_name", $user_name);
+            $db->where("password", $pass);
+            $user = $db->getOne('member');
 //            print_r($result);
-            $xml_tag= 'user';
-            include ($root.'/libs/convert_format.php');
+            $xml_root_tag = '<user></user>';
+            $result = $user;
+            include($root . '/libs/convert_format.php');
 //            echo 'login thanh cong';
             exit;
         } else {
-            $_SESSION['flash'] = $flash;
             echo 'login that bai';
             exit;
         }

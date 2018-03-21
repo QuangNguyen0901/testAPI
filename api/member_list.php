@@ -1,11 +1,12 @@
 <?php
 include ('../libs/config.php');
-include ($root.'/libs/connection.php');  //=>$conn
-$query_content = mysqli_query($conn, 'SELECT * FROM member');
+include ($root.'/libs/MysqliDb.php');
 
-//xml tag
-//level1 tag    <users>, </users>
-//level2 tag    <user>,</user>
-$xml_tag= 'user';
+//ket qua list member
+$db = new MysqliDb();
+$result = $db->get('member');
 
-include ($root.'/libs/common.php');
+//xml root tag
+$xml_root_tag='<users></users>';
+
+include ($root.'/libs/convert_format.php');

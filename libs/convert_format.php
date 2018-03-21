@@ -1,4 +1,6 @@
 <?php
+include ($root.'/libs/Array2XML.php');
+
 $query_results = $result;
 
 
@@ -22,37 +24,23 @@ if ($format == 'json') {
     header('Content-type: application/json; charset=utf-8');
     echo json_encode($query_results);
 }
+
 if ($format == 'xml') {
     header('Content-type: text/xml; charset=utf-8');
-    echo '<' . $xml_tag . 's>';
-    foreach ($query_results as $k => $query_result) {
-        if (is_array($query_result)) {
-            echo '<' . $xml_tag . '>';
-            foreach ($query_result as $key => $value) {
-                echo '<', $key, '>', $value, '</', $key, '>';
-            }
-            echo '</' . $xml_tag . '>';
-        } else {
-            echo '<', $k, '>', $query_result, '</', $k, '>';
-        }
-    }
-    echo '</' . $xml_tag . 's>';
-}
-?>
+    $xml_info = new SimpleXMLElement("<?xml version=\"1.0\"?>".$xml_root_tag);
+    array_to_xml($query_results,$xml_info);
+    echo $xml_info->asXML();
 
-<?php function array_to_xml($data, &$xml_data)
-{
-    foreach ($data as $key => $value) {
-        if (is_numeric($key)) {
-            $key = 'item' . $key; //dealing with <0/>..<n/> issues
-        }
-        if (is_array($value)) {
-            $subnode = $xml_data->addChild($key);
-            array_to_xml($value, $subnode);
-        } else {
-            $xml_data->addChild("$key", htmlspecialchars("$value"));
-        }
-    }
+//    echo '<'.$xml_tag.'s>';
+//    foreach ($query_results as $query_result) {
+//        echo '<'.$xml_tag.'>';
+//        if (is_array($query_result)) {
+//            foreach ($query_result as $key => $value) {
+//                echo '<', $key, '>', $value, '</', $key, '>';
+//            }
+//        }
+//        echo '</'.$xml_tag.'>';
+//    }
+//    echo '</'.$xml_tag.'s>';
 }
-
 ?>
