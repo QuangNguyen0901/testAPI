@@ -5,22 +5,23 @@ include($root . '/libs/hash.php');
 $hash = new Hash();
 
 
-if (!empty($_GET)) {
+if (!empty(file_get_contents('php://input'))) {
+    $post = json_decode(file_get_contents('php://input'), true);
     $user_name = '';
     $pass = '';
     $success = true;
 
-    if (!$_GET['user'] || $_GET['user'] == '') {
+    if (!$post['user'] || $post['user'] == '') {
         $flash['type'] = 'error';
         $flash['msg'] .= 'Please input username';
         $success = false;
-    } else $user_name = $_GET['user'];
+    } else $user_name = $post['user'];
 
-    if (!$_GET['pass'] || $_GET['pass'] == '') {
+    if (!$post['pass'] || $post['pass'] == '') {
         $flash['type'] = 'error';
         $flash['msg'] .= 'Please input password';
         $success = false;
-    } else $pass = $_GET['pass'];
+    } else $pass = $post['pass'];
 
     if ($success) {
         $db = new MysqliDb();
@@ -45,9 +46,9 @@ if (!empty($_GET)) {
             $data = array(
                 "token" => $token,
                 "token_started_at" => $date
-                );
+            );
 
-//          insert token vao DB
+//          insert token vaof DB
             $db->where('id', $user['id']);
             $db->update('member', $data);
 //          Lay lai user da cap nhan token
@@ -56,13 +57,11 @@ if (!empty($_GET)) {
             $user = $db->getOne('member');
 
             $xml_root_tag = '<user></user>';
-
-//            include($root . '/libs/convert_format.php');
-            include ($root.'/libs/ConvertFormat.php');
-            ConvertFormat::showData($user,$xml_root_tag);
+            $result = $user;
+            include($root . '/libs/convert_format.php');
             exit;
         } else {
-            echo 'Khong co user tuong ung hoac co nhieu hon 1 user co thong tin dang nhap da nhap';
+            echo 'login that bai';
             exit;
         }
     } else {

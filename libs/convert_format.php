@@ -1,12 +1,7 @@
 <?php
 include ($root.'/libs/Array2XML.php');
 
-$query_results = $result;
-
-
-//print_r($members);
-//
-//echo $members[1]['user_name'];
+$query_results = $result;  //need $result
 
 //Lấy kiểu định dạng muốn lấy của request
 $formatList = array('json', 'xml');
@@ -31,17 +26,5 @@ if ($format == 'xml') {
     $xml_info = new SimpleXMLElement("<?xml version=\"1.0\"?>".$xml_root_tag);
     array_to_xml($query_results,$xml_info);
     echo $xml_info->asXML();
-
-//    echo '<'.$xml_tag.'s>';
-//    foreach ($query_results as $query_result) {
-//        echo '<'.$xml_tag.'>';
-//        if (is_array($query_result)) {
-//            foreach ($query_result as $key => $value) {
-//                echo '<', $key, '>', $value, '</', $key, '>';
-//            }
-//        }
-//        echo '</'.$xml_tag.'>';
-//    }
-//    echo '</'.$xml_tag.'s>';
 }
 ?>
