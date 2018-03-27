@@ -7,4 +7,4 @@ define('HOST','qblog.com');
 
 $root = $_SERVER['DOCUMENT_ROOT'];
 
-//aaaa
+//aaaabbbb
