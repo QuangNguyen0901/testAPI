@@ -10,14 +10,15 @@ if (!empty(file_get_contents('php://input'))) {
     $user_name = '';
     $pass = '';
     $success = true;
+    $flash['msg']='';
 
-    if (!$post['user'] || $post['user'] == '') {
+    if (!isset($post['user']) || $post['user'] == '') {
         $flash['type'] = 'error';
         $flash['msg'] .= 'Please input username';
         $success = false;
     } else $user_name = $post['user'];
 
-    if (!$post['pass'] || $post['pass'] == '') {
+    if (!isset($post['pass']) || $post['pass'] == '') {
         $flash['type'] = 'error';
         $flash['msg'] .= 'Please input password';
         $success = false;
@@ -27,7 +28,7 @@ if (!empty(file_get_contents('php://input'))) {
         $db = new MysqliDb();
         $flash = NULL;
 
-        //Convert input pass to salt(chuoi ma hoa)
+        //Convert input pass to (chuoi ma hoa)
         $db->where("user_name", $user_name);
         $cols = Array('salt');
         $salt = $db->getOne('member', null, $cols)['salt'];
@@ -48,7 +49,7 @@ if (!empty(file_get_contents('php://input'))) {
                 "token_started_at" => $date
             );
 
-//          insert token vaof DB
+//          insert token vao DB
             $db->where('id', $user['id']);
             $db->update('member', $data);
 //          Lay lai user da cap nhan token
@@ -56,6 +57,7 @@ if (!empty(file_get_contents('php://input'))) {
             $db->where("password", $pass);
             $user = $db->getOne('member');
 
+//show data
             $xml_root_tag = '<user></user>';
             $result = $user;
             include($root . '/libs/convert_format.php');
