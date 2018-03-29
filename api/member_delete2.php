@@ -41,10 +41,10 @@ if (!empty(file_get_contents('php://input'))) {
             $date = date('Y/m/d H:i:s');
             $v = strtotime($date) - strtotime($user[0]['token_started_at']);
 //            print_r($v);
-            if ($v < 30) {
+            if ($v < LOGIN_TOKEN_TIME) {
                 $db->where('id', $delete_id);
-                $db->delete();
-                echo 'member ' . $user_name . 'has deleted';
+                $db->delete('member');
+                echo 'member ' . $delete_id . ' has deleted';
 
 //                $result = $db->get('member');
 //                $xml_root_tag = '<users></users>'; //xml root tag

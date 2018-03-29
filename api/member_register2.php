@@ -54,6 +54,7 @@ if (!empty(file_get_contents('php://input'))) {
             "password" => $pass,
             "email" => $email,
             "salt" => $salt,
+            "role" => 2,
         );
         $id = $db->insert ('member', $data);
         if($id)

@@ -3,15 +3,15 @@ include('../libs/config.php');
 include($root . '/libs/MysqliDb.php');
 
 if (!empty($_GET)) {
-    $user_name = '';
+    $login_user_name = '';
     $token = '';
     $success = true;
 
-    if (!$_GET['user'] || $_GET['user'] == '') {
+    if (!$_GET['login_user'] || $_GET['login_user'] == '') {
         $flash['type'] = 'error';
-        $flash['msg'] .= 'Please input username';
+        $flash['msg'] .= 'Please input login_user';
         $success = false;
-    } else $user_name = $_GET['user'];
+    } else $login_user_name = $_GET['login_user'];
 
     if (!$_GET['token'] || $_GET['token'] == '') {
         $flash['type'] = 'error';
@@ -23,7 +23,7 @@ if (!empty($_GET)) {
         $flash = NULL;
         $db = new MysqliDb();
         //select user
-        $db->where("user_name", $user_name);
+        $db->where("user_name", $login_user_name);
         $db->where("token", $token);
         $user = $db->get('member');
         if ($db->count == 1) {
