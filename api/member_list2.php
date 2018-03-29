@@ -43,7 +43,7 @@ if (!empty(file_get_contents('php://input'))) {
             exit;
         }
     } else {
-        echo 'login that bai';
+        print_r($flash);
         exit;
     }
 } else {
